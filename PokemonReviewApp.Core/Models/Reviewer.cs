@@ -11,5 +11,8 @@ namespace PokemonReviewApp.Core.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        //navigation properties
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

@@ -12,6 +12,7 @@ namespace PokemonReviewApp.Core.Models
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
 
-
+        //navigation properties
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

@@ -11,5 +11,7 @@ namespace PokemonReviewApp.Core.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
+        //navigation properties
+        public ICollection<Owner> Owners { get; set; } = new List<Owner>();
     }
 }
