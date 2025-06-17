@@ -14,5 +14,6 @@ namespace PokemonReviewApp.Core.Models
 
         // Navigation properties
         public Country Country { get; set; }
+        public ICollection<PokemonOwner> PokemonOwners { get; set; } = new List<PokemonOwner>();
     }
 }
