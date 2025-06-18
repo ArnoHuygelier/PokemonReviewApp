@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using PokemonReviewApp.Repository;
+using PokemonReviewApp.Services.SeedDB;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<SeedService>();
+builder.Services.AddDbContextFactory<PokemonDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 
@@ -14,6 +23,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    var scope = app.Services.CreateScope();
+
+    using(var context = scope.ServiceProvider.GetRequiredService<PokemonDbContext>())
+    {
+        var seedService = scope.ServiceProvider.GetRequiredService<SeedService>();
+        seedService.SeedDataContext();
+    }
 }
 
 app.UseHttpsRedirection();
