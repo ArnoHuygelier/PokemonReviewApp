@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using PokemonReviewApp.Core.Interfaces;
 using PokemonReviewApp.Repository;
 using PokemonReviewApp.Services.SeedDB;
+using PokemonReviewApp.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<SeedService>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<PokemonService>();
+
 builder.Services.AddDbContextFactory<PokemonDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
