@@ -10,15 +10,11 @@ namespace PokemonReviewApp.Services.Services
 {
     public class PokemonService
     {
-        private readonly IRepository<Pokemon> _repository;
+        private readonly IPokemonRepository _repository;
 
-        public PokemonService(IRepository<Pokemon> repository)
+        public PokemonService(IPokemonRepository repository)
         {
             _repository = repository;
-        }
-        public async Task<IEnumerable<Pokemon>> GetPokemons()
-        {
-            return await _repository.GetAllAsync();
         }
     }
 }

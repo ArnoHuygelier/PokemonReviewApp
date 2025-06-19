@@ -14,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<SeedService>();
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 builder.Services.AddScoped<PokemonService>();
 
 builder.Services.AddDbContextFactory<PokemonDbContext>(options =>
