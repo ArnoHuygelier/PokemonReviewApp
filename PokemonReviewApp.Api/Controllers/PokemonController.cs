@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using PokemonReviewApp.Api.DTOs;
 using PokemonReviewApp.Services.Services;
 using System.Threading.Tasks;
 
@@ -10,15 +12,18 @@ namespace PokemonReviewApp.Api.Controllers
     {
         private readonly PokemonService _service;
 
-        public PokemonController(PokemonService service)
+        private readonly IMapper _mapper;
+
+        public PokemonController(PokemonService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetPokemons()
         {
-            var pokemons = _service.GetAllPokemons();
+            var pokemons = _mapper.Map<List<PokemonDto>>(_service.GetAllPokemons());
 
             if (!ModelState.IsValid)
             {
@@ -37,7 +42,9 @@ namespace PokemonReviewApp.Api.Controllers
             {
                 return NotFound();
             }
-            var pokemon = _service.GetPokemonById(pokemonId);
+
+            var pokemon = _mapper.Map<PokemonDto>(_service.GetPokemonById(pokemonId));
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

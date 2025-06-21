@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PokemonReviewApp.Repository
+namespace PokemonReviewApp.Repository.Repos
 {
     public class PokemonRepository : IPokemonRepository
     {
