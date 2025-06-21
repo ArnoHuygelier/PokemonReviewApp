@@ -12,7 +12,7 @@ namespace PokemonReviewApp.Api.Controllers
     {
         private readonly PokemonService _service;
 
-        private IMapper _mapper { get; }
+        private readonly IMapper _mapper;
 
         public PokemonController(PokemonService service, IMapper mapper)
         {

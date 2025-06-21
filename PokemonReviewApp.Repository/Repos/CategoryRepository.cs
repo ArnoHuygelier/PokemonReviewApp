@@ -33,7 +33,7 @@ namespace PokemonReviewApp.Repository.Repos
             return _context.Categories.Where(c => c.Name.Trim().ToLower() == name.Trim().ToLower()).FirstOrDefault();
         }
 
-        public ICollection<Pokemon> GetPokemonByCategory(int categoryId)
+        public ICollection<Pokemon> GetPokemonsByCategoryId(int categoryId)
         {
             return _context.PokemonCategories.Where(p => p.CategoryID == categoryId)
                 .Select(p => p.Pokemon).ToList();
@@ -43,5 +43,11 @@ namespace PokemonReviewApp.Repository.Repos
         {
             return _context.Categories.Any(c => c.Id == categoryId);
         }
+
+        public bool CategoriesExists(string categoryName)
+        {
+            return _context.Categories.Any(c => c.Name.Trim().ToLower() == categoryName.Trim().ToLower());
+        }
+
     }
 }

@@ -32,14 +32,19 @@ namespace PokemonReviewApp.Services.Services
             return _categoryRepository.GetCategoryByName(name);
         }
 
-        public ICollection<Pokemon> GetPokemonsByCategory(int categoryId)
+        public ICollection<Pokemon> GetPokemonsByCategoryId(int categoryId)
         {
-            return _categoryRepository.GetPokemonByCategory(categoryId);
+            return _categoryRepository.GetPokemonsByCategoryId(categoryId);
         }
 
         public bool DoesCategoryExist(int categoryId)
         {
             return _categoryRepository.CategoriesExists(categoryId);
+        }
+
+        public bool DoesCategoryExist(string categoryName)
+        {
+            return _categoryRepository.CategoriesExists(categoryName);
         }
     }
 }
