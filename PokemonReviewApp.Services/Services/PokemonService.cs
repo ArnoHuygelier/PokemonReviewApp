@@ -10,11 +10,36 @@ namespace PokemonReviewApp.Services.Services
 {
     public class PokemonService
     {
-        private readonly IPokemonRepository _repository;
+        private readonly IPokemonRepository _pokemonRepository;
 
-        public PokemonService(IPokemonRepository repository)
+        public PokemonService(IPokemonRepository pokemonRepository)
         {
-            _repository = repository;
+            _pokemonRepository = pokemonRepository;
+        }
+
+        public ICollection<Pokemon> GetAllPokemons()
+        {
+            return _pokemonRepository.GetPokemons();
+        }
+
+        public Pokemon? GetPokemonById(int id)
+        {
+            return _pokemonRepository.GetPokemon(id);
+        }
+
+        public Pokemon? GetPokemonByName(string name)
+        {
+            return _pokemonRepository.GetPokemon(name);
+        }
+
+        public int GetPokemonRating(int id)
+        {
+            return _pokemonRepository.GetPokemonRating(id);
+        }
+
+        public bool DoesPokemonExist(int id)
+        {
+            return _pokemonRepository.PokemonExists(id);
         }
     }
 }

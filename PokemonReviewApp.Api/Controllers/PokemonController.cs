@@ -16,17 +16,53 @@ namespace PokemonReviewApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPokemons()
+        public IActionResult GetPokemons()
         {
-            var pokemons = await _service.GetPokemons();
+            var pokemons = _service.GetAllPokemons();
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             else
             {
                 return Ok(pokemons);
+            }
+        }
+
+        [HttpGet("{pokemonId}")]
+        public IActionResult GetPokemon(int pokemonId)
+        {
+            if (!_service.DoesPokemonExist(pokemonId))
+            {
+                return NotFound();
+            }
+            var pokemon = _service.GetPokemonById(pokemonId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                return Ok(pokemon);
+            }
+        }
+
+        [HttpGet("rating/{pokemonId}")]
+        public IActionResult GetPokemonRating(int pokemonId)
+        {
+            if (!_service.DoesPokemonExist(pokemonId))
+            {
+                return NotFound();
+            }
+            var rating = _service.GetPokemonRating(pokemonId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                return Ok(rating);
             }
         }
     }
