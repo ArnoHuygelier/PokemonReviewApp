@@ -22,6 +22,15 @@ builder.Services.AddScoped<PokemonService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<CategoryService>();
 
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<CountryService>();
+
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
+builder.Services.AddScoped<OwnerService>();
+
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<ReviewService>();
+
 builder.Services.AddDbContextFactory<PokemonDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
