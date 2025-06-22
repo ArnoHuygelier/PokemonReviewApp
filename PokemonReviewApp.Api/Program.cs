@@ -31,6 +31,9 @@ builder.Services.AddScoped<OwnerService>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ReviewService>();
 
+builder.Services.AddScoped<IReviewerRepository, ReviewerRepository>();
+builder.Services.AddScoped<ReviewerService>();
+
 builder.Services.AddDbContextFactory<PokemonDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
