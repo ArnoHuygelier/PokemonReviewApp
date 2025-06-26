@@ -53,5 +53,17 @@ namespace PokemonReviewApp.Services.Services
                 return _pokemonRepository.CreatePokemon(ownerId, categoryId, pokemon);
             }
         }
+
+        public bool UpdatePokemon(Pokemon pokemon)
+        {
+            if (pokemon == null)
+            {
+                return false;
+            }
+            else
+            {
+                return _pokemonRepository.UpdatePokemon(pokemon);
+            }
+        }
     }
 }

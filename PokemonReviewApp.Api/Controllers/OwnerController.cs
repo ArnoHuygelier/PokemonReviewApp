@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PokemonReviewApp.Api.DTOs;
+using PokemonReviewApp.Core.Models;
 using PokemonReviewApp.Services.Services;
 
 namespace PokemonReviewApp.Api.Controllers
@@ -114,5 +115,37 @@ namespace PokemonReviewApp.Api.Controllers
             }
         }
 
+        [HttpPut]
+        public IActionResult UpdateOwner([FromQuery] int ownerId, [FromBody] OwnerDto ownerUpdate)
+        {
+            if (ownerUpdate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_service.OwnerExists(ownerId))
+            {
+                return NotFound("Owner not found");
+            }
+
+            var ownerMap = _mapper.Map<Owner>(ownerUpdate);
+
+            ownerMap.Id = ownerId;
+
+            if (!_service.UpdateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the owner");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Owner updated successfully!");
+            }
+        }
     }
 }

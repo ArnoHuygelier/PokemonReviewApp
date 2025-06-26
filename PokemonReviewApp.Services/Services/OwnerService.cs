@@ -55,5 +55,14 @@ namespace PokemonReviewApp.Services.Services
             }
             return _ownerRepository.CreateOwner(owner);
         }
+
+        public bool UpdateOwner(Owner owner)
+        {
+            if (owner == null)
+            {
+                return false;
+            }
+            return _ownerRepository.UpdateOwner(owner);
+        }
     }
 }

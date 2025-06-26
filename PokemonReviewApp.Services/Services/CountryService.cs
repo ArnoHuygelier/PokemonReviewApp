@@ -55,5 +55,14 @@ namespace PokemonReviewApp.Services.Services
             }
             return _countryRepository.CreateCountry(country);
         }
+
+        public bool UpdateCountry(Country country)
+        {
+            if (country == null)
+            {
+                return false;
+            }
+            return _countryRepository.UpdateCountry(country);
+        }
     }
 }

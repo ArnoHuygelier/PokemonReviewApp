@@ -45,5 +45,14 @@ namespace PokemonReviewApp.Services.Services
             }
             return _reviewRepository.CreateReview(review);
         }
+
+        public bool UpdateReview(Review review)
+        {
+            if (review == null)
+            {
+                return false;
+            }
+            return _reviewRepository.UpdateReview(review);
+        }
     }
 }

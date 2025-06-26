@@ -116,5 +116,40 @@ namespace PokemonReviewApp.Api.Controllers
                 return Ok("Country successfully created");
             }
         }
+
+        [HttpPut]
+        public IActionResult UpdateCountry([FromQuery] int countryId, [FromBody] CountryDto countryUpdate)
+        {
+            if (countryUpdate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var country = _service.GetCountry(countryId);
+
+            if (country == null)
+            {
+                return NotFound("Country not found");
+            }
+
+            var countryMap = _mapper.Map<Country>(countryUpdate);
+
+            countryMap.Id = countryId;
+
+            if (!_service.UpdateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the country");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Country updated successfully!");
+            }
+        }
     }
 }
