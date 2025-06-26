@@ -67,6 +67,5 @@ namespace PokemonReviewApp.Api.Controllers
                 return Ok(reviews);
             }
         }
-
     }
 }
