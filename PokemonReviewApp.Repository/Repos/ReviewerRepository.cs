@@ -41,5 +41,23 @@ namespace PokemonReviewApp.Repository.Repos
             return _context.Reviewers
                 .Any(r => r.Id == reviewerId);
         }
+
+        public bool ReviewerExists(string firstName, string lastName)
+        {
+            return _context.Reviewers
+                .Any(r => r.FirstName.ToLower().Trim() == firstName.ToLower().Trim() &&
+                          r.LastName.ToLower().Trim() == lastName.ToLower().Trim());
+        }
+
+        public bool CreateReviewer(Reviewer reviewer)
+        {
+            _context.Reviewers.Add(reviewer);
+            return Save();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }

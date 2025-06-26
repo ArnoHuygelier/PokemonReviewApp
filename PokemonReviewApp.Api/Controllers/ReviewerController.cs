@@ -67,5 +67,37 @@ namespace PokemonReviewApp.Api.Controllers
                 return Ok(reviews);
             }
         }
+
+        [HttpPost]
+        public IActionResult CreateReviewer([FromBody] ReviewerDto reviewerDto)
+        {
+            if (reviewerDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var reviewer = _mapper.Map<Core.Models.Reviewer>(reviewerDto);
+
+            if (_service.ReviewerExists(reviewer.FirstName, reviewer.LastName))
+            {
+                ModelState.AddModelError("", "Reviewer already exists");
+                return StatusCode(400, ModelState);
+            }
+
+            if (!_service.CreateReviewer(reviewer))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving the reviewer");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Reviewer successfully created");
+            }
+        }
     }
 }
