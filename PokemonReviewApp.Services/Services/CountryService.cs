@@ -27,6 +27,11 @@ namespace PokemonReviewApp.Services.Services
             return _countryRepository.GetCountry(countryId);
         }
 
+        public Country? GetCountry(string countryName)
+        {
+            return _countryRepository.GetCountry(countryName);
+        }
+
         public Country? GetCountryByOwner(int ownerId)
         {
             return _countryRepository.GetCountryByOwner(ownerId);
@@ -40,6 +45,15 @@ namespace PokemonReviewApp.Services.Services
         public bool CountryExists(int countryId)
         {
             return _countryRepository.CoutryExists(countryId);
+        }
+
+        public bool CreateCountry(Country country)
+        {
+            if (country == null)
+            {
+                return false;
+            }
+            return _countryRepository.CreateCountry(country);
         }
     }
 }

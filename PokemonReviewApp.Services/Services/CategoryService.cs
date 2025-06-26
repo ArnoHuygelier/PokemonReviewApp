@@ -46,5 +46,14 @@ namespace PokemonReviewApp.Services.Services
         {
             return _categoryRepository.CategoriesExists(categoryName);
         }
+
+        public bool CreateCategory(Category category)
+        {
+            if (category == null || string.IsNullOrWhiteSpace(category.Name))
+            {
+                return false; // Invalid category
+            }
+            return _categoryRepository.CreateCategory(category);
+        }
     }
 }
