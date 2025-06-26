@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PokemonReviewApp.Api.DTOs;
+using PokemonReviewApp.Core.Models;
 using PokemonReviewApp.Services.Services;
 
 namespace PokemonReviewApp.Api.Controllers
@@ -87,6 +88,73 @@ namespace PokemonReviewApp.Api.Controllers
             else
             {
                 return Ok(pokemons);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateCategory([FromBody] CategoryDto categoryCreate)
+        {
+            if(categoryCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var category = _service.GetCategoryByName(categoryCreate.Name);
+
+            if (category != null)
+            {
+                ModelState.AddModelError("", "Category already exists!");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var categoryMap = _mapper.Map<Category>(categoryCreate);
+
+            if(!_service.CreateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving the category");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Category created successfully!");
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateCategory([FromQuery] int categoryId, [FromBody] CategoryDto categoryUpdate)
+        {
+            if (categoryUpdate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_service.DoesCategoryExist(categoryId))
+            {
+                return NotFound("Category not found");
+            }
+
+            var categoryMap = _mapper.Map<Category>(categoryUpdate);
+
+            categoryMap.Id = categoryId;
+
+            if(!_service.UpdateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the category");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Category updated successfully!");
             }
         }
     }

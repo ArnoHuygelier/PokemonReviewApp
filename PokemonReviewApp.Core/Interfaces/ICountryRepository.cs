@@ -11,9 +11,13 @@ namespace PokemonReviewApp.Core.Interfaces
     {
         ICollection<Country> GetCountries();
         Country? GetCountry(int countryId);
+        Country? GetCountry(string countryName);
         Country? GetCountryByOwner(int ownerId);
         ICollection<Owner> GetOwnersFromCountry(int countryId);
         bool CoutryExists(int countryId);
+        bool CreateCountry(Country country);
+        bool UpdateCountry(Country country);
+        bool Save();
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PokemonReviewApp.Api.DTOs;
+using PokemonReviewApp.Core.Models;
 using PokemonReviewApp.Services.Services;
 
 namespace PokemonReviewApp.Api.Controllers
@@ -79,6 +80,75 @@ namespace PokemonReviewApp.Api.Controllers
             else
             {
                 return Ok(owners);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateCountry([FromBody] CountryDto countryCreate)
+        {
+            if (countryCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var country = _service.GetCountry(countryCreate.Name);
+
+            if (country != null)
+            {
+                ModelState.AddModelError("", "Country already exists!");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var countryMap = _mapper.Map<Country>(countryCreate);
+
+            if (!_service.CreateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving the country");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Country successfully created");
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateCountry([FromQuery] int countryId, [FromBody] CountryDto countryUpdate)
+        {
+            if (countryUpdate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var country = _service.GetCountry(countryId);
+
+            if (country == null)
+            {
+                return NotFound("Country not found");
+            }
+
+            var countryMap = _mapper.Map<Country>(countryUpdate);
+
+            countryMap.Id = countryId;
+
+            if (!_service.UpdateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the country");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Country updated successfully!");
             }
         }
     }

@@ -41,5 +41,28 @@ namespace PokemonReviewApp.Services.Services
         {
             return _ownerRepository.OwnerExists(ownerId);
         }
+
+        public bool OwnerExists(string firstName, string lastName)
+        {
+            return _ownerRepository.OwnerExists(firstName, lastName);
+        }
+
+        public bool CreateOwner(Owner owner)
+        {
+            if (owner == null)
+            {
+                return false;
+            }
+            return _ownerRepository.CreateOwner(owner);
+        }
+
+        public bool UpdateOwner(Owner owner)
+        {
+            if (owner == null)
+            {
+                return false;
+            }
+            return _ownerRepository.UpdateOwner(owner);
+        }
     }
 }

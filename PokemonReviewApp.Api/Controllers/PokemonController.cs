@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PokemonReviewApp.Api.DTOs;
+using PokemonReviewApp.Core.Models;
 using PokemonReviewApp.Services.Services;
 using System.Threading.Tasks;
 
@@ -70,6 +71,40 @@ namespace PokemonReviewApp.Api.Controllers
             else
             {
                 return Ok(rating);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreatePokemon([FromQuery] int ownerId, [FromQuery] int categoryId, [FromBody] PokemonDto pokemonDto)
+        {
+            if (pokemonDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var pokemon = _mapper.Map<Pokemon>(pokemonDto);
+
+            var pokemonExists = _service.GetPokemonByName(pokemon.Name);
+            if (pokemonExists != null)
+            {
+                ModelState.AddModelError("", "Pokemon already exists with this name");
+                return StatusCode(400, ModelState);
+            }
+
+            if (!_service.CreatePokemon(ownerId, categoryId, pokemon))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving the Pokemon");
+                return StatusCode(500, ModelState);
+            }
+
+            else
+            {
+                return Ok("Pokemon created successfully");
             }
         }
     }

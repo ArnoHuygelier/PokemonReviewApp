@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PokemonReviewApp.Api.DTOs;
+using PokemonReviewApp.Core.Models;
 using PokemonReviewApp.Services.Services;
 
 namespace PokemonReviewApp.Api.Controllers
@@ -10,11 +11,13 @@ namespace PokemonReviewApp.Api.Controllers
     public class OwnerController : Controller
     {
         private readonly OwnerService _service;
+        private readonly CountryService _countryService;
         private readonly IMapper _mapper;
 
-        public OwnerController(OwnerService service, IMapper mapper)
+        public OwnerController(OwnerService service, IMapper mapper, CountryService countryService)
         {
             _service = service;
+            _countryService = countryService;
             _mapper = mapper;
         }
 
@@ -75,6 +78,73 @@ namespace PokemonReviewApp.Api.Controllers
             else
             {
                 return Ok(pokemons);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateOwner([FromQuery] int countryId, [FromBody] OwnerDto owner)
+        {
+            if (owner == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ownerMap = _mapper.Map<Core.Models.Owner>(owner);
+
+            ownerMap.Country = _countryService.GetCountry(countryId);
+
+            if (_service.OwnerExists(ownerMap.FirstName, ownerMap.LastName))
+            {
+                ModelState.AddModelError("", "Owner already exists");
+                return StatusCode(400, ModelState);
+            }
+
+            if (!_service.CreateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving the owner");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Owner created successfully");
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateOwner([FromQuery] int ownerId, [FromBody] OwnerDto ownerUpdate)
+        {
+            if (ownerUpdate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_service.OwnerExists(ownerId))
+            {
+                return NotFound("Owner not found");
+            }
+
+            var ownerMap = _mapper.Map<Owner>(ownerUpdate);
+
+            ownerMap.Id = ownerId;
+
+            if (!_service.UpdateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the owner");
+                return StatusCode(500, ModelState);
+            }
+            else
+            {
+                return Ok("Owner updated successfully!");
             }
         }
     }
