@@ -42,11 +42,6 @@ namespace PokemonReviewApp.Services.Services
             return _pokemonRepository.PokemonExists(id);
         }
 
-        public bool DoesPokemonExist(string pokemokName)
-        {
-            return _pokemonRepository.PokemonExists(pokemokName);
-        }
-
         public bool CreatePokemon(int ownerId, int categoryId, Pokemon pokemon)
         {
             if (pokemon == null)
@@ -59,7 +54,7 @@ namespace PokemonReviewApp.Services.Services
             }
         }
 
-        public bool UpdatePokemon(Pokemon pokemon)
+        public bool UpdatePokemon(int ownerId, int categoryId, Pokemon pokemon)
         {
             if (pokemon == null)
             {
@@ -67,7 +62,7 @@ namespace PokemonReviewApp.Services.Services
             }
             else
             {
-                return _pokemonRepository.UpdatePokemon(pokemon);
+                return _pokemonRepository.UpdatePokemon(ownerId, categoryId, pokemon);
             }
         }
     }

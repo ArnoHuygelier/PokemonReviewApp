@@ -16,7 +16,7 @@ namespace PokemonReviewApp.Api.Controllers
         private readonly PokemonService _service;
 
         private readonly IMapper _mapper;
-        private readonly PokemonDbContext _context;
+        private readonly PokemonDbContext context;
 
         public PokemonController(PokemonService service, IMapper mapper, PokemonDbContext context)
         {
@@ -144,5 +144,38 @@ namespace PokemonReviewApp.Api.Controllers
                 return Ok("Pokemon updated successfully!");
             }
         }
+
+        // PATCH: api/Pokemon/5/owners
+        [HttpPatch("{id}/owners")]
+        public async Task<IActionResult> UpdatePokemonOwners(int id, [FromBody] List<int> ownerIds)
+        {
+            var pokemon = await _context.Pokemons
+                .Include(p => p.PokemonOwners)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pokemon == null)
+                return NotFound();
+
+            // Verwijder huidige koppelingen
+            pokemon.PokemonOwners.Clear();
+
+            // Voeg nieuwe koppelingen toe
+            foreach (var ownerId in ownerIds)
+            {
+                var owner = await _context.Owners.FindAsync(ownerId); // Zorg dat je een Owner model hebt
+                if (owner != null)
+                {
+                    pokemon.PokemonOwners.Add(new PokemonOwner
+                    {
+                        PokemonId = pokemon.Id,
+                        OwnerId = owner.Id
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
     }
 }

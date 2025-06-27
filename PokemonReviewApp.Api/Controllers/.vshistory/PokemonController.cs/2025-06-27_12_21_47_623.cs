@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PokemonReviewApp.Api.DTOs;
 using PokemonReviewApp.Core.Models;
-using PokemonReviewApp.Repository;
 using PokemonReviewApp.Services.Services;
 using System.Threading.Tasks;
 
@@ -16,13 +14,11 @@ namespace PokemonReviewApp.Api.Controllers
         private readonly PokemonService _service;
 
         private readonly IMapper _mapper;
-        private readonly PokemonDbContext _context;
 
-        public PokemonController(PokemonService service, IMapper mapper, PokemonDbContext context)
+        public PokemonController(PokemonService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
-            _context = context;
         }
 
         [HttpGet]
@@ -125,23 +121,23 @@ namespace PokemonReviewApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_service.DoesPokemonExist(pokemonId))
+            if (!_service.DoesPokemonExist(pokemonUpdate.Name))
             {
                 return NotFound("Pokemon not found");
             }
 
-            var pokemonMap = _mapper.Map<Pokemon>(pokemonUpdate);
+            var pokemonMap = _mapper.Map<Owner>(pokemonUpdate);
 
             pokemonMap.Id = pokemonId;
 
             if (!_service.UpdatePokemon(pokemonMap))
             {
-                ModelState.AddModelError("", "Something went wrong while updating the pokemon");
+                ModelState.AddModelError("", "Something went wrong while updating the owner");
                 return StatusCode(500, ModelState);
             }
             else
             {
-                return Ok("Pokemon updated successfully!");
+                return Ok("Owner updated successfully!");
             }
         }
     }

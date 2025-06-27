@@ -51,11 +51,6 @@ namespace PokemonReviewApp.Repository.Repos
             return _context.Pokemon.Any(p => p.Id == pokemonId);
         }
 
-        public bool PokemonExists(string pokemonName)
-        {
-            return _context.Pokemon.Any(p => p.Name.Trim().ToLower() == pokemonName.Trim().ToLower());
-        }
-
         public bool CreatePokemon(int owernId, int categoryId, Pokemon pokemon)
         {
 
@@ -95,7 +90,7 @@ namespace PokemonReviewApp.Repository.Repos
             return saved > 0 ? true : false;
         }
 
-        public bool UpdatePokemon(Pokemon pokemon)
+        public bool UpdatePokemon(int ownerId, int categoryId, Pokemon pokemon)
         {
             _context.Update(pokemon);
             return Save();

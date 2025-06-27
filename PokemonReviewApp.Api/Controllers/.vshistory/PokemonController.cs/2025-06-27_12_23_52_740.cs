@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PokemonReviewApp.Api.DTOs;
 using PokemonReviewApp.Core.Models;
-using PokemonReviewApp.Repository;
 using PokemonReviewApp.Services.Services;
 using System.Threading.Tasks;
 
@@ -16,13 +14,11 @@ namespace PokemonReviewApp.Api.Controllers
         private readonly PokemonService _service;
 
         private readonly IMapper _mapper;
-        private readonly PokemonDbContext _context;
 
-        public PokemonController(PokemonService service, IMapper mapper, PokemonDbContext context)
+        public PokemonController(PokemonService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
-            _context = context;
         }
 
         [HttpGet]
