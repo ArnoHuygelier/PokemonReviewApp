@@ -121,23 +121,23 @@ namespace PokemonReviewApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_service.DoesPokemonExist(pokemonId))
+            if (!_service.DoesPokemonExist(pokemonUpdate.Name))
             {
                 return NotFound("Pokemon not found");
             }
 
-            var pokemonMap = _mapper.Map<Pokemon>(pokemonUpdate);
+            var pokemonMap = _mapper.Map<Owner>(pokemonUpdate);
 
             pokemonMap.Id = pokemonId;
 
-            if (!_service.UpdatePokemon(pokemonMap))
+            if (!_service.UpdateOwner(ownerMap))
             {
-                ModelState.AddModelError("", "Something went wrong while updating the pokemon");
+                ModelState.AddModelError("", "Something went wrong while updating the owner");
                 return StatusCode(500, ModelState);
             }
             else
             {
-                return Ok("Pokemon updated successfully!");
+                return Ok("Owner updated successfully!");
             }
         }
     }

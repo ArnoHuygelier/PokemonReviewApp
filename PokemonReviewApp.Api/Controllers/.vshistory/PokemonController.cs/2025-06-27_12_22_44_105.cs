@@ -121,7 +121,7 @@ namespace PokemonReviewApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_service.DoesPokemonExist(pokemonId))
+            if (!_service.DoesPokemonExist(pokemonUpdate.Name))
             {
                 return NotFound("Pokemon not found");
             }
@@ -132,12 +132,12 @@ namespace PokemonReviewApp.Api.Controllers
 
             if (!_service.UpdatePokemon(pokemonMap))
             {
-                ModelState.AddModelError("", "Something went wrong while updating the pokemon");
+                ModelState.AddModelError("", "Something went wrong while updating the owner");
                 return StatusCode(500, ModelState);
             }
             else
             {
-                return Ok("Pokemon updated successfully!");
+                return Ok("Owner updated successfully!");
             }
         }
     }

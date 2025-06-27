@@ -107,38 +107,5 @@ namespace PokemonReviewApp.Api.Controllers
                 return Ok("Pokemon created successfully");
             }
         }
-
-        [HttpPut]
-        public IActionResult UpdatePokemon([FromQuery] int pokemonId, [FromBody] PokemonDto pokemonUpdate)
-        {
-            if (pokemonUpdate == null)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (!_service.DoesPokemonExist(pokemonId))
-            {
-                return NotFound("Pokemon not found");
-            }
-
-            var pokemonMap = _mapper.Map<Pokemon>(pokemonUpdate);
-
-            pokemonMap.Id = pokemonId;
-
-            if (!_service.UpdatePokemon(pokemonMap))
-            {
-                ModelState.AddModelError("", "Something went wrong while updating the pokemon");
-                return StatusCode(500, ModelState);
-            }
-            else
-            {
-                return Ok("Pokemon updated successfully!");
-            }
-        }
     }
 }

@@ -42,11 +42,6 @@ namespace PokemonReviewApp.Services.Services
             return _pokemonRepository.PokemonExists(id);
         }
 
-        public bool DoesPokemonExist(string pokemokName)
-        {
-            return _pokemonRepository.PokemonExists(pokemokName);
-        }
-
         public bool CreatePokemon(int ownerId, int categoryId, Pokemon pokemon)
         {
             if (pokemon == null)

@@ -109,9 +109,9 @@ namespace PokemonReviewApp.Api.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdatePokemon([FromQuery] int pokemonId, [FromBody] PokemonDto pokemonUpdate)
+        public IActionResult UpdatePokemon([FromQuery] int ownerId, [FromQuery] int categoryId, [FromBody] OwnerDto ownerUpdate)
         {
-            if (pokemonUpdate == null)
+            if (ownerUpdate == null)
             {
                 return BadRequest(ModelState);
             }
@@ -121,23 +121,23 @@ namespace PokemonReviewApp.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!_service.DoesPokemonExist(pokemonId))
+            if (!_service.OwnerExists(ownerId))
             {
-                return NotFound("Pokemon not found");
+                return NotFound("Owner not found");
             }
 
-            var pokemonMap = _mapper.Map<Pokemon>(pokemonUpdate);
+            var ownerMap = _mapper.Map<Owner>(ownerUpdate);
 
-            pokemonMap.Id = pokemonId;
+            ownerMap.Id = ownerId;
 
-            if (!_service.UpdatePokemon(pokemonMap))
+            if (!_service.UpdateOwner(ownerMap))
             {
-                ModelState.AddModelError("", "Something went wrong while updating the pokemon");
+                ModelState.AddModelError("", "Something went wrong while updating the owner");
                 return StatusCode(500, ModelState);
             }
             else
             {
-                return Ok("Pokemon updated successfully!");
+                return Ok("Owner updated successfully!");
             }
         }
     }

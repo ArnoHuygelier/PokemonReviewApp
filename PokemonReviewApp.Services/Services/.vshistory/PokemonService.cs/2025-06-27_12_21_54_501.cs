@@ -67,7 +67,7 @@ namespace PokemonReviewApp.Services.Services
             }
             else
             {
-                return _pokemonRepository.UpdatePokemon(pokemon);
+                return _pokemonRepository.UpdatePokemon(ownerId, categoryId, pokemon);
             }
         }
     }
